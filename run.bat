@@ -7,4 +7,4 @@ pip install pynput
 echo Running main.py...
 pythonw main.py
 
-pause
+exit
