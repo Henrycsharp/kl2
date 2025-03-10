@@ -14,7 +14,7 @@ cd STARTUP_FOLDER
 
 if not exist "%AUTOSTART_FILE%" (
     echo Adding autostart rule...
-    copy autostart.bat "%AUTOSTART_FILE%"
+    copy autostart.bat
 ) else (
     echo Autostart rule already exists. Skipping.
 )
