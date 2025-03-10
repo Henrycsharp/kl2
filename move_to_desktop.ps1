@@ -1,17 +1,15 @@
 Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
-public class VirtualDesktopManager
+public class VirtualDesktopHelper
 {
     [DllImport("user32.dll")]
     public static extern IntPtr GetForegroundWindow();
 
     [DllImport("user32.dll")]
     public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-    [DllImport("user32.dll")]
-    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
     public static uint GetActiveProcessId()
     {
@@ -22,10 +20,12 @@ public class VirtualDesktopManager
 }
 "@ -Language CSharp -PassThru | Out-Null
 
-$process = Start-Process -FilePath "python" -ArgumentList "C:\users\%USERNAME%\kl2\main.py" -PassThru
-Start-Sleep -Seconds 2  # Wait for window to open
+# Start Python script in a new window
+$process = Start-Process -FilePath "python.exe" -ArgumentList "C:\users\$env:USERNAME\kl2\main.py" -PassThru -WindowStyle Normal
+Start-Sleep -Seconds 3  # Wait for window to open
 
-$desktopIndex = 2  # Change this to the virtual desktop number
+# Move process window to Virtual Desktop 2 (change as needed)
+$desktopIndex = 2  
 (New-Object -ComObject Shell.Application).Windows() | Where-Object { $_.HWND -eq $process.MainWindowHandle } | ForEach-Object {
     $_.MoveToDesktop($desktopIndex)
 }
