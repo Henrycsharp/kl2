@@ -9,5 +9,3 @@ if not exist "%startupFolder%\run.bat" (
 ) else (
     echo run.bat is already in the Startup folder.
 )
-
-exit
