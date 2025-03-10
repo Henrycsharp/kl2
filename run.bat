@@ -10,7 +10,7 @@ pip install pynput
 call autostart.bat
 
 echo Running main.py...
-python main.py
+pythonw main.py
 if %errorlevel% neq 0 (
     echo Error occurred while running main.py.
 )
