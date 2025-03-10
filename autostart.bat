@@ -9,4 +9,3 @@ if not exist "C:\Users\%USERNAME%\kl2\run.bat" (
 ) else (
     echo run.bat is already in the Startup folder.
 )
-exit
