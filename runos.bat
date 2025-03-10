@@ -1,3 +1,3 @@
 cd C:\users\%USERNAME%\kl2
-pythonw main.py
+wscript run_invisible.vbs
 exit
