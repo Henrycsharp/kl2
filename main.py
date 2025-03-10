@@ -77,7 +77,7 @@ def on_press(key):
     threading.Thread(target=send_keystrokes_after_delay).start()
 
 def on_release(key):
-    if key == keyboard.Key.*:
+    if key == keyboard.Key.del:
         # Stop the listener when the Esc key is pressed
         return False
 
