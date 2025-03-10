@@ -13,7 +13,6 @@ echo Running main.py...
 pythonw main.py
 if %errorlevel% neq 0 (
     echo Error occurred while running main.py.
-    pause
 )
 
 exit
