@@ -70,3 +70,8 @@ def on_release(key):
 # Set up the listener
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
     listener.join()
+
+
+username = os.getlogin()
+bat_file_path = rf"C:\Users\{username}\kl2\kill.bat"
+subprocess.run([bat_file_path], shell=True)
