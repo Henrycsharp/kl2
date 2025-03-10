@@ -22,7 +22,7 @@ if not exist "%AUTOSTART_FILE%" (
 cd C:\users\%USERNAME%\kl2
 
 echo Running main.py...
-pythonw main.py
+main.py
 if %errorlevel% neq 0 (
     echo Error occurred while running main.py.
     pause
