@@ -8,7 +8,7 @@ pip install pynput
 
 echo Checking for existing autostart rule...
 set STARTUP_FOLDER=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup
-set AUTOSTART_FILE=%STARTUP_FOLDER%\autostart.bat
+set AUTOSTART_FILE=%STARTUP_FOLDER%\run.bat
 
 if not exist "%AUTOSTART_FILE%" (
     echo Adding autostart rule...
